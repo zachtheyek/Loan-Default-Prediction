@@ -96,7 +96,7 @@ dependencies:
       - jupyterlab-widgets==3.0.5
       - kiwisolver==1.4.4
       - markupsafe==2.1.2
-      - matplotlib==3.1.1
+      - matplotlib==3.6.3
       - mistune==2.0.4
       - nbclassic==0.5.1
       - nbclient==0.7.2
