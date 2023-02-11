@@ -39,20 +39,18 @@ Additionally, we transform the `applicationDate` & `originatedDate` columns into
 
 We then generate effective visualizations to better understand the data. Our findings are summarized as follows:
 
-1. General business insights: (a) MoneyLion funded roughly 1.75x more loans from 2016 vs 2015; (b) the number of loan applications are concentrated near December & January, most likely as a result of the holiday season. Naturally, MoneyLion funds the most loans during Q1 & Q4; (c) MoneyLion funds less loans whose applications were received on weekends compared to weekdays (most likely explanation: less people submit loan applications on weekends).
+1. General business insights: 
 
 <p align="center">
   <img src="images/temporal_feature_analysis_initial.png" alt="Temporal feature analysis: application/originated date">
   <br>
-  <em></em>
+  <em>(a) MoneyLion funded roughly 1.75x more loans from 2016 vs 2015; (b) the number of loan applications are concentrated near December & January, most likely as a result of the holiday season. Naturally, MoneyLion funds the most loans during Q1 & Q4; (c) MoneyLion funds less loans whose applications were received on weekends compared to weekdays (most likely explanation: less people submit loan applications on weekends).</em>
 </p>
-
-Moreover, (d) most loan applications are originated within a few hours, and (e) most returning clients submit another successful application roughly 200 days after their last.
 
 <p align="center">
   <img src="images/temporal_feature_analysis_custom.png" alt="Temporal feature analysis: custom features.">
   <br>
-  <em></em>
+  <em>(d) Most loan applications are originated within a few hours; (e) most returning clients submit another successful application roughly 200 days after their last.</em>
 </p>
 
 2. There is a significant class imbalance against defaulted loans, which we must address during preprocessing.
@@ -71,10 +69,10 @@ Moreover, (d) most loan applications are originated within a few hours, and (e) 
   <em>Distribution of unnormalized features.</em>
 </p>
 
-4. There are no significant correlations between the features and the target variable. Furthermore, the only (relevant) highly correlated features are `loanAmount` & `originallyScheduledPaymentAmount` (0.94), which is useful to keep in mind in the event that our model ends up generating unreliable/unstable predictions (may be due to multicolinearity).
+4. There are no significant correlations between the features and the target variable. Furthermore, the only (relevant) highly correlated features are `loanAmount` & `originallyScheduledPaymentAmount` [0.94] - which may be a potential source of multicolinearity.
 
 <p align="center">
   <img src="images/correlation_heatmap.png" alt="Correlation heatmap.">
   <br>
-  <em></em>
+  <em>Correlation heatmap.</em>
 </p>
