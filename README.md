@@ -53,12 +53,12 @@ We then generate effective visualizations to better understand the data. Our fin
   <em>(d) Most loan applications are originated within a few hours; (e) most returning clients submit another successful application roughly 200 days after their last.</em>
 </p>
 
-2. There is a significant class imbalance against defaulted loans, which we must address during preprocessing.
+2. There is a significant class imbalance against defaulted loans, which we will address using oversampling.
 
 <p align="center">
   <img src="images/class_imbalance.png" alt="Class imbalance.">
   <br>
-  <em>97.38% of our data represents non-defaulted loans, whereas only 2.62% of the data are defaulted.</em>
+  <em>Before oversampling: 97.38% of our data represents non-defaulted loans, whereas only 2.62% of the data are defaulted.</em>
 </p>
 
 3. The numeric features are heavily skewed, implying that we should either pick a model that's robust to skewness, and/or normalize these data during preprocessing.
@@ -66,13 +66,51 @@ We then generate effective visualizations to better understand the data. Our fin
 <p align="center">
   <img src="images/unnormalized_feature_distributions.png" alt="Distributions of unnormalized features.">
   <br>
-  <em>Distribution of unnormalized features.</em>
+  <em>Distribution of unnormalized features: notice the skewness, outliers, and bimodality in certain histograms.</em>
 </p>
 
-4. There are no significant correlations between the features and the target variable. Furthermore, the only (relevant) highly correlated features are `loanAmount` & `originallyScheduledPaymentAmount` [0.94] - which may be a potential source of multicolinearity.
+<p align="center">
+  <img src="images/normalized_feature_distributions.png" alt="Distributions of normalized features.">
+  <br>
+  <em>Distribution of scaled/normalized features: notice the relative scaling, reduced skewness, and improved Gaussianity in certain histograms.</em>
+</p>
+
+<p align="center">
+  <img src="images/normalized_feature_distributions_correction.png" alt="Corrected distribution of normalized features.">
+  <br>
+  <em>Since `time_since_last` uses -1 inplace of missing values, the distribution of positive values paint a clearer picture of the improvements as a result of normalization.</em>
+</p>
+
+4. There are a few potential sources of multicolinearity to keep in mind, in the event that our model ends up generating unreliable/unstable predictions.
 
 <p align="center">
   <img src="images/correlation_heatmap.png" alt="Correlation heatmap.">
   <br>
-  <em>Correlation heatmap.</em>
+  <em>Correlation heatmap: the target variable is not significantly correlated with any of the features; further, the only (relevant) highly correlated features are `loanAmount` & `originallyScheduledPaymentAmount` at 0.94.</em>
+</p>
+
+# Model Development
+
+Once our data is in good shape, we train a series of popular binary classification models, and evaluate their performance using ROC-AUC score.
+
+<p align="center">
+  <img src="images/roc_auc.png" alt="ROC-AUC scores.">
+  <br>
+  <em>Incredibly, the Random Forest Ensemble vastly outperforms the other 3 models, with an ROC-AUC score of 99.90%! Since the model performed so well at identifying loans at risk of default, we'll skip the fine-tuning phase altogether, as any incremental improvement in performance would not be worth the additional time spent + computational costs (not to mention the potential for overfitting).</em>
+</p>
+
+Digging deeper, we uncover the features that were most useful for the Random Forest Ensemble to arrive at the right answer. 
+
+<p align="center">
+  <img src="images/feature_importances.png" alt="Feature importances.">
+  <br>
+  <em>Notice, the various lead types don't seem to be of much importance to our model, while features that describe the financial obligations of the loan (like `loanAmount`, `apr`, and `originallyScheduledPaymentAmount`) play a bigger part in its decision making process. Further, `clearfraudscore` and `time_to_originate` also play significant roles from the perspective of the model.</em>
+</p>
+
+Since `time_to_originate` is the most significant feature, yet it's unclear how it affects the probability of a loan defaulting, we use a Partial Dependence Plot (PDP) to visualize the relationship between the feature and the model's predictions for that feature, while holding all other features constant.
+
+<p align="center">
+  <img src="images/pdp_time_to_originate.png" alt="PDP time_to_originate.">
+  <br>
+  <em>We find that the longer it takes for an application to originate, the higher the probability of default; loans that are originated soon after the application date are more likely to be paid in full. We suspect that this may be because clients with their "ducks in a row" simply pass through an automated origination filter, leading to quicker turnarounds, whereas clients that don't have to wait for their applications to be manually inspected. Though, without more knowledge of the origination process, it's hard to draw any concrete conclusions. </em>
 </p>
