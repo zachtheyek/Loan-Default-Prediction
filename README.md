@@ -42,13 +42,13 @@ We then generate effective visualizations to better understand the data. Our fin
 1. General business insights: 
 
 <p align="center">
-  <img src="images/temporal_feature_analysis_initial.png" alt="Temporal feature analysis: application/originated date">
+  <img src="images/application_trends.png" alt="Temporal feature analysis: application/originated date">
   <br>
   <em>(a) MoneyLion funded roughly 1.75x more loans from 2016 vs 2015; (b) the number of loan applications are concentrated near December & January, most likely as a result of the holiday season. Naturally, MoneyLion funds the most loans during Q1 & Q4; (c) MoneyLion funds less loans whose applications were received on weekends compared to weekdays (most likely explanation: less people submit loan applications on weekends).</em>
 </p>
 
 <p align="center">
-  <img src="images/temporal_feature_analysis_custom.png" alt="Temporal feature analysis: custom features.">
+  <img src="images/turnover_rates.png" alt="Temporal feature analysis: custom features.">
   <br>
   <em>(d) Most loan applications are originated within a few hours; (e) most returning clients submit another successful application roughly 200 days after their last.</em>
 </p>
